@@ -4,8 +4,9 @@
         ejs: any;
     }
 
-    export interface IIndexViewModel {
+    export interface IIndexViewModel {        
         host: any;
+        source: any;
         query: any;
         sort: any;
         aggregationProviders: util.SimpleSet;

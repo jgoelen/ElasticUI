@@ -8,6 +8,7 @@ module elasticui.controllers {
 
         public indexVM: IIndexViewModel = {
             host: null,
+            source: null,
             query: null,
             sort: null,
             aggregationProviders: new elasticui.util.SimpleSet(),
@@ -70,6 +71,12 @@ module elasticui.controllers {
             var combinedFilter = this.filters.getAsFilter();
             if (combinedFilter != null) {
                 request.filter(combinedFilter);
+            }
+
+            if(this.indexVM.source != null) {
+                request.source(this.indexVM.source, null);
+            } else {
+                request.source(true, null);
             }
 
             if (this.indexVM.query != null) {
