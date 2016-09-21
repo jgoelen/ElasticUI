@@ -98,6 +98,9 @@ declare module elasticui.filters {
     }
 }
 declare module elasticui.controllers {
+    var controllers: ng.IModule;
+}
+declare module elasticui.controllers {
     interface IAggregationScope extends IIndexScope {
         aggResult: any;
         aggregation: {
@@ -146,6 +149,7 @@ declare module elasticui.controllers {
     }
     interface IIndexViewModel {
         host: any;
+        source: any;
         query: any;
         sort: any;
         aggregationProviders: util.SimpleSet;
@@ -283,6 +287,19 @@ declare module elasticui.controllers {
         private updateQuery();
     }
 }
+declare module elasticui.controllers {
+    interface ISourceScope extends IIndexScope {
+        source: any;
+    }
+    class SourceController {
+        private scope;
+        static $inject: string[];
+        constructor($scope: ISourceScope);
+        init(): void;
+        private updateSource();
+        readSource(): void;
+    }
+}
 declare module elasticui.directives {
     class HighlightDirective {
         constructor();
@@ -295,6 +312,11 @@ declare module elasticui.directives {
 }
 declare module elasticui.directives {
     class QueryDirective {
+        constructor();
+    }
+}
+declare module elasticui.directives {
+    class SourceDirective {
         constructor();
     }
 }

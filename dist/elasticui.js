@@ -453,7 +453,13 @@ var elasticui;
         filters.filters.filter('euiTimestamp', TimestampFilter);
     })(filters = elasticui.filters || (elasticui.filters = {}));
 })(elasticui || (elasticui = {}));
-angular.module('elasticui.controllers', []).controller(elasticui.controllers);
+var elasticui;
+(function (elasticui) {
+    var controllers;
+    (function (_controllers) {
+        _controllers.controllers = angular.module('elasticui.controllers', []);
+    })(controllers = elasticui.controllers || (elasticui.controllers = {}));
+})(elasticui || (elasticui = {}));
 var elasticui;
 (function (elasticui) {
     var controllers;
@@ -597,6 +603,7 @@ var elasticui;
                 this.filters = new elasticui.util.FilterCollection();
                 this.indexVM = {
                     host: null,
+                    source: null,
                     query: null,
                     sort: null,
                     aggregationProviders: new elasticui.util.SimpleSet(),
@@ -666,6 +673,12 @@ var elasticui;
                 var combinedFilter = this.filters.getAsFilter();
                 if (combinedFilter != null) {
                     request.filter(combinedFilter);
+                }
+                if (this.indexVM.source != null) {
+                    request.source(this.indexVM.source, null);
+                }
+                else {
+                    request.source(true, null);
                 }
                 if (this.indexVM.query != null) {
                     request.query(this.indexVM.query);
@@ -1111,6 +1124,34 @@ var elasticui;
 })(elasticui || (elasticui = {}));
 var elasticui;
 (function (elasticui) {
+    var controllers;
+    (function (controllers) {
+        var SourceController = (function () {
+            function SourceController($scope) {
+                this.scope = $scope;
+            }
+            SourceController.prototype.init = function () {
+                var _this = this;
+                this.scope.$watch('indexVM.source', function () { return _this.readSource(); });
+                this.scope.$watch('source', function () { return _this.readSource(); });
+                this.updateSource();
+            };
+            SourceController.prototype.updateSource = function () {
+                if (this.scope.source !== null) {
+                    this.scope.indexVM.source = this.scope.source;
+                }
+            };
+            SourceController.prototype.readSource = function () {
+                this.scope.source = this.scope.indexVM.source;
+            };
+            SourceController.$inject = ['$scope'];
+            return SourceController;
+        })();
+        controllers.SourceController = SourceController;
+    })(controllers = elasticui.controllers || (elasticui.controllers = {}));
+})(elasticui || (elasticui = {}));
+var elasticui;
+(function (elasticui) {
     var directives;
     (function (directives) {
         var HighlightDirective = (function () {
@@ -1194,6 +1235,29 @@ var elasticui;
         })();
         directives.QueryDirective = QueryDirective;
         directives.directives.directive('euiQuery', QueryDirective);
+    })(directives = elasticui.directives || (elasticui.directives = {}));
+})(elasticui || (elasticui = {}));
+var elasticui;
+(function (elasticui) {
+    var directives;
+    (function (directives) {
+        var SourceDirective = (function () {
+            function SourceDirective() {
+                var directive = {};
+                directive.restrict = 'A';
+                directive.scope = true;
+                directive.controller = elasticui.controllers.SourceController;
+                directive.link = function (scope, element, attrs, sourceCtrl) {
+                    scope.$watch(element.attr('eui-source'), function (val) { return scope.source = val; });
+                    scope.source = scope.$eval(element.attr('eui-source'));
+                    sourceCtrl.init();
+                };
+                return directive;
+            }
+            return SourceDirective;
+        })();
+        directives.SourceDirective = SourceDirective;
+        directives.directives.directive('euiSource', SourceDirective);
     })(directives = elasticui.directives || (elasticui.directives = {}));
 })(elasticui || (elasticui = {}));
 var elasticui;
