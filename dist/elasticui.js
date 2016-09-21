@@ -1133,7 +1133,7 @@ var elasticui;
             SourceController.prototype.init = function () {
                 var _this = this;
                 this.scope.$watch('indexVM.source', function () { return _this.readSource(); });
-                this.scope.$watch('source', function () { return _this.readSource(); });
+                this.scope.$watch('source', function () { return _this.updateSource(); });
                 this.updateSource();
             };
             SourceController.prototype.updateSource = function () {
