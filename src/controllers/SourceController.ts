@@ -14,7 +14,7 @@ module elasticui.controllers {
 
         public init() {
             this.scope.$watch('indexVM.source', () => this.readSource());
-            this.scope.$watch('source', () => this.readSource());
+            this.scope.$watch('source', () => this.updateSource());
             this.updateSource();
         }
 
